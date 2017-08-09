@@ -99,13 +99,13 @@ public class NotesContentContract {
          * The mime type of a directory of items
          */
         public static final String CONTENT_DIR_TYPE =
-                ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.com.shellmonger.notes";
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/vnd.com.amazonaws.mobile.samples.notes";
 
         /**
          * The mime type of a single item
          */
         public static final String CONTENT_ITEM_TYPE =
-                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.com.shellmonger.notes";
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/vnd.com.amazonaws.mobile.samples.notes";
 
         /**
          * A projection of all columns in the items table

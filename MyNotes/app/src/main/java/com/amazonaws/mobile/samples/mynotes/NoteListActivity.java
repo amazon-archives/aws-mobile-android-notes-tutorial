@@ -140,7 +140,8 @@ public class NoteListActivity
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                ((NotesAdapter) notesList.getAdapter()).remove((NoteViewHolder) viewHolder);
+                final NoteViewHolder noteHolder = (NoteViewHolder) viewHolder;
+                ((NotesAdapter) notesList.getAdapter()).remove(noteHolder);
             }
 
             @Override

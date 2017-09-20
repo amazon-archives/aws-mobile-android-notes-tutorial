@@ -13,7 +13,6 @@
 package com.amazonaws.mobile.samples.mynotes;
 
 import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
@@ -42,7 +41,7 @@ public class NoteDetailFragment extends Fragment {
      * The fragment argument representing the item ID that this fragment
      * represents.
      */
-    public static final String ARG_ITEM_ID = "item_id";
+    public static final String ARG_ITEM_ID = "noteId";
 
     /**
      * The dummy content this fragment is presenting.
@@ -100,8 +99,8 @@ public class NoteDetailFragment extends Fragment {
         // the content resolver aka the content provider.
         Bundle arguments = getArguments();
         if (arguments != null && arguments.containsKey(ARG_ITEM_ID)) {
-            long itemId = getArguments().getLong(ARG_ITEM_ID);
-            itemUri = ContentUris.withAppendedId(NotesContentContract.Notes.CONTENT_URI, itemId);
+            String itemId = getArguments().getString(ARG_ITEM_ID);
+            itemUri = NotesContentContract.Notes.uriBuilder(itemId);
             Cursor data = contentResolver.query(itemUri, NotesContentContract.Notes.PROJECTION_ALL, null, null, null);
             if (data != null) {
                 data.moveToFirst();

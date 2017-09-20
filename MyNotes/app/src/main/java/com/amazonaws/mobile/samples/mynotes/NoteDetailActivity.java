@@ -44,8 +44,8 @@ public class NoteDetailActivity extends AppCompatActivity {
             Bundle arguments = new Bundle();
             Bundle extras = getIntent().getExtras();
             if (extras != null && extras.containsKey(NoteDetailFragment.ARG_ITEM_ID)) {
-                long itemId = extras.getLong(NoteDetailFragment.ARG_ITEM_ID);
-                arguments.putLong(NoteDetailFragment.ARG_ITEM_ID, itemId);
+                String noteId = extras.getString(NoteDetailFragment.ARG_ITEM_ID);
+                arguments.putString(NoteDetailFragment.ARG_ITEM_ID, noteId);
             }
             NoteDetailFragment fragment = new NoteDetailFragment();
             fragment.setArguments(arguments);

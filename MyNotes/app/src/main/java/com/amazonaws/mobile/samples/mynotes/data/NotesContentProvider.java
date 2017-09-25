@@ -14,7 +14,6 @@ package com.amazonaws.mobile.samples.mynotes.data;
 
 import android.content.ContentProvider;
 import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
@@ -105,8 +104,9 @@ public class NotesContentProvider extends ContentProvider {
                 }
                 break;
             case ONE_ITEM:
+                String where = getOneItemClause(uri.getLastPathSegment());
                 queryBuilder.setTables(NotesContentContract.Notes.TABLE_NAME);
-                queryBuilder.appendWhere(NotesContentContract.Notes._ID + " = " + uri.getLastPathSegment());
+                queryBuilder.appendWhere(where);
                 break;
         }
 
@@ -149,12 +149,10 @@ public class NotesContentProvider extends ContentProvider {
         switch (uriType) {
             case ALL_ITEMS:
                 SQLiteDatabase db = databaseHelper.getWritableDatabase();
-                long id = db.insert(
-                        NotesContentContract.Notes.TABLE_NAME,
-                        null,
-                        values);
+                long id = db.insert(NotesContentContract.Notes.TABLE_NAME, null, values);
                 if (id > 0) {
-                    Uri item = ContentUris.withAppendedId(uri, id);
+                    String noteId = values.getAsString(NotesContentContract.Notes.NOTEID);
+                    Uri item = NotesContentContract.Notes.uriBuilder(noteId);
                     notifyAllListeners(item);
                     return item;
                 }
@@ -184,7 +182,7 @@ public class NotesContentProvider extends ContentProvider {
                         selection, selectionArgs);              // The WHERE clause
                 break;
             case ONE_ITEM:
-                String where = NotesContentContract.Notes._ID + " = " + uri.getLastPathSegment();
+                String where = getOneItemClause(uri.getLastPathSegment());
                 if (!TextUtils.isEmpty(selection)) {
                     where += " AND " + selection;
                 }
@@ -224,7 +222,7 @@ public class NotesContentProvider extends ContentProvider {
                         selection, selectionArgs);              // The WHERE clause
                 break;
             case ONE_ITEM:
-                String where = NotesContentContract.Notes._ID + " = " + uri.getLastPathSegment();
+                String where = getOneItemClause(uri.getLastPathSegment());
                 if (!TextUtils.isEmpty(selection)) {
                     where += " AND " + selection;
                 }
@@ -251,5 +249,9 @@ public class NotesContentProvider extends ContentProvider {
         if (resolver != null) {
             resolver.notifyChange(uri, null);
         }
+    }
+
+    private String getOneItemClause(String id) {
+        return String.format("%s = \"%s\"", NotesContentContract.Notes.NOTEID, id);
     }
 }

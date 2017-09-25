@@ -43,6 +43,11 @@ public class NotesContentContract {
         public static final String TABLE_NAME = "notes";
 
         /**
+         * The internal ID
+         */
+        public static final String _ID = "id";
+
+        /**
          * The noteId field
          */
         public static final String NOTEID = "noteId";
@@ -75,7 +80,7 @@ public class NotesContentContract {
         /**
          * The items base-path
          */
-        public static final String ITEM_BASEPATH = "notes/#";
+        public static final String ITEM_BASEPATH = "notes/*";
 
         /**
          * The SQLite database command to create the table
@@ -123,5 +128,20 @@ public class NotesContentContract {
          * The default sort order (SQLite syntax)
          */
         public static final String SORT_ORDER_DEFAULT = CREATED + " ASC";
+
+        /**
+         * Build a URI for the provided note
+         * @param noteId the ID of the provided note
+         * @return the URI of the provided note
+         */
+        public static Uri uriBuilder(String noteId) {
+            Uri item = new Uri.Builder()
+                    .scheme("content")
+                    .authority(NotesContentContract.AUTHORITY)
+                    .appendPath(NotesContentContract.Notes.DIR_BASEPATH)
+                    .appendPath(noteId)
+                    .build();
+            return item;
+        }
     }
 }

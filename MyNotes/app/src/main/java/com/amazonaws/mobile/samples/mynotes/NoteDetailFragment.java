@@ -152,6 +152,7 @@ public class NoteDetailFragment extends Fragment {
             } else {
                 itemUri = contentResolver.insert(NotesContentContract.Notes.CONTENT_URI, values);
                 isUpdate = true;    // Anything from now on is an update
+                itemUri = NotesContentContract.Notes.uriBuilder(mItem.getNoteId());
             }
         }
     }

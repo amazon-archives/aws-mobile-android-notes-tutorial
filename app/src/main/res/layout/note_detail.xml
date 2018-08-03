@@ -15,49 +15,37 @@ HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTIO
 OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 -->
-<layout
+<android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/note_detail"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    tools:context=".ui.NoteDetailFragment">
 
-    <data>
-        <variable
-            name="vm"
-            type="com.amazonaws.mobile.samples.mynotes.viewmodels.NoteDetailViewModel"/>
-    </data>
+    <EditText
+        android:id="@+id/edit_title"
+        android:layout_width="368dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="@string/title_hint"
+        android:textAlignment="viewStart"
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+        android:textColor="?attr/editTextColor"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="8dp" />
 
-    <android.support.constraint.ConstraintLayout
-
-        android:id="@+id/note_detail"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        tools:context=".ui.NoteDetailFragment">
-
-        <EditText
-            android:id="@+id/edit_title"
-            android:text="@{vm.getTitle()}"
-            android:layout_width="368dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:hint="@string/title_hint"
-            android:textAlignment="viewStart"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:textColor="?attr/editTextColor"
-            android:textStyle="bold"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginStart="8dp" />
-
-        <EditText
-            android:id="@+id/edit_content"
-            android:text="@{vm.getContent()}"
-            android:layout_width="368dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:hint="@string/content_hint"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_title"
-            android:layout_marginStart="8dp" />
-    </android.support.constraint.ConstraintLayout>
-</layout>
+    <EditText
+        android:id="@+id/edit_content"
+        android:layout_width="368dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="@string/content_hint"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_title"
+        android:layout_marginStart="8dp" />
+</android.support.constraint.ConstraintLayout>

@@ -17,64 +17,80 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 package com.amazonaws.mobile.samples.mynotes.ui;
 
 import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+
 import com.amazonaws.mobile.samples.mynotes.NotesApp;
 import com.amazonaws.mobile.samples.mynotes.R;
-import com.amazonaws.mobile.samples.mynotes.databinding.NoteDetailBinding;
 import com.amazonaws.mobile.samples.mynotes.models.Note;
 import com.amazonaws.mobile.samples.mynotes.viewmodels.NoteDetailViewModel;
 
 public class NoteDetailFragment extends Fragment {
     NoteDetailViewModel viewModel;
+    String noteId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        viewModel = ViewModelProviders.of(this).get(NoteDetailViewModel.class);
         Bundle arguments = getArguments();
         if (arguments != null) {
-            viewModel.setNoteId(arguments.getString(NotesApp.ITEM_ID));
+            noteId = arguments.getString(NotesApp.ITEM_ID);
         }
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        NoteDetailBinding binding = DataBindingUtil.inflate(inflater, R.layout.note_detail, container, false);
-        binding.setLifecycleOwner(this);
-        binding.setVm(viewModel);
+        View view = inflater.inflate(R.layout.note_detail, container, false);
 
-        // We need to be careful about doing a "two-way binding" in this case.  We don't want
-        // that because it can cause cyclical API calls, which can cascade out of control.
-        // Instead, we use one-way data binding and trap the changes the other way so that we
-        // do the appropriate API calls
-        viewModel.getTitle().observe(this, new Observer<String>() {
+        final EditText titleField = view.findViewById(R.id.edit_title);
+        final EditText contentField = view.findViewById(R.id.edit_content);
+
+        viewModel = ViewModelProviders.of(this).get(NoteDetailViewModel.class);
+        viewModel.getNote().observe(this, new Observer<Note>() {
             @Override
-            public void onChanged(@Nullable String title) {
+            public void onChanged(@Nullable Note note) {
+                titleField.setText(note.getTitle());
+                contentField.setText(note.getContent());
+            }
+        });
+        viewModel.setNoteId(noteId);
+
+        titleField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            @Override
+            public void afterTextChanged(Editable s) {
                 Note note = viewModel.getNote().getValue();
-                note.setTitle(title);
+                note.setTitle(s.toString());
                 viewModel.saveNote(note);
             }
         });
 
-        viewModel.getContent().observe(this, new Observer<String>() {
+        contentField.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onChanged(@Nullable String content) {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            @Override
+            public void afterTextChanged(Editable s) {
                 Note note = viewModel.getNote().getValue();
-                note.setContent(content);
+                note.setContent(s.toString());
                 viewModel.saveNote(note);
             }
         });
 
-        return binding.getRoot();
+        return view;
     }
 }

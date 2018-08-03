@@ -27,26 +27,20 @@ import com.amazonaws.mobile.samples.mynotes.repository.NotesRepository;
 
 public class NoteDetailViewModel extends ViewModel {
     private MutableLiveData<Note> mNote;
-    private MutableLiveData<String> mTitle;
-    private MutableLiveData<String> mContent;
     private NotesRepository notesRepository;
 
     public NoteDetailViewModel() {
         this.notesRepository = Injection.getNotesRepository();
         this.mNote = new MutableLiveData<>();
-        this.mTitle = new MutableLiveData<>();
-        this.mContent = new MutableLiveData<>();
     }
 
     public void setNoteId(final String noteId) {
         notesRepository.get(noteId, new ResultCallback<Note>() {
             @Override
             public void onResult(Note result) {
-                if (result != null)
+                if (result == null)
                     result = new Note(noteId);
                 mNote.postValue(result);
-                mTitle.postValue(result.getTitle());
-                mContent.postValue(result.getContent());
             }
         });
     }
@@ -55,12 +49,10 @@ public class NoteDetailViewModel extends ViewModel {
         notesRepository.save(note, new ResultCallback<Note>() {
             @Override
             public void onResult(Note result) {
-                mNote.postValue(result);
+                /* Do nothing */
             }
         });
     }
 
     public LiveData<Note> getNote() { return mNote; }
-    public LiveData<String> getTitle() { return mTitle; }
-    public LiveData<String> getContent() { return mContent; }
 }

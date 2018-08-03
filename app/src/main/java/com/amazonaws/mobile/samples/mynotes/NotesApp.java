@@ -32,6 +32,7 @@ public class NotesApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Injection.initialize(getApplicationContext());
     }
 }
 

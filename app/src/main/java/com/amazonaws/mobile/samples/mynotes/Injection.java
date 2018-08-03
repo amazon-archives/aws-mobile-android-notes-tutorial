@@ -16,6 +16,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.amazonaws.mobile.samples.mynotes;
 
+import android.content.Context;
+
 import com.amazonaws.mobile.samples.mynotes.repository.NotesRepository;
 import com.amazonaws.mobile.samples.mynotes.services.AnalyticsService;
 import com.amazonaws.mobile.samples.mynotes.services.DataService;
@@ -31,21 +33,18 @@ public class Injection {
     private static NotesRepository notesRepository = null;
 
     public static synchronized DataService getDataService() {
-        initialize();
         return dataService;
     }
 
     public static synchronized AnalyticsService getAnalyticsService() {
-        initialize();
         return analyticsService;
     }
 
     public static synchronized NotesRepository getNotesRepository() {
-        initialize();
         return notesRepository;
     }
 
-    private static synchronized void initialize() {
+    public static synchronized void initialize(Context context) {
         if (analyticsService == null) {
             analyticsService = new MockAnalyticsService();
         }

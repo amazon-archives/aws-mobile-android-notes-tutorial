@@ -43,12 +43,21 @@ public interface DataService {
     void getNote(String noteId, ResultCallback<Note> callback);
 
     /**
-     * Save a note to the backing store
+     * Create a new note a note to the backing store
      *
-     * @param note the note to be saved
+     * @param title the title of the new note
+     * @param content the content for the new note
      * @param callback the response from the server (null would indicate that the operation failed)
      */
-    void saveNote(Note note, ResultCallback<Note> callback);
+    void createNote(String title, String content, ResultCallback<Note> callback);
+
+    /**
+     * Update an existing note in the backing store
+     *
+     * @param note the new contents of the note
+     * @param callback the response from the server (null would indicate that the operation failed)
+     */
+    void updateNote(Note note, ResultCallback<Note> callback);
 
     /**
      * Delete a note from the backing store

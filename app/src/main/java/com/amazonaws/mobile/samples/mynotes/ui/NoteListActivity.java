@@ -16,12 +16,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.amazonaws.mobile.samples.mynotes.ui;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.arch.paging.PagedList;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -34,13 +31,10 @@ import com.amazonaws.mobile.samples.mynotes.Injection;
 import com.amazonaws.mobile.samples.mynotes.NotesApp;
 import com.amazonaws.mobile.samples.mynotes.R;
 import com.amazonaws.mobile.samples.mynotes.models.Note;
-import com.amazonaws.mobile.samples.mynotes.models.OnClickCallback;
-import com.amazonaws.mobile.samples.mynotes.models.RemoveCallback;
 import com.amazonaws.mobile.samples.mynotes.services.AnalyticsService;
 import com.amazonaws.mobile.samples.mynotes.viewmodels.NoteListViewModel;
 
 import java.util.HashMap;
-import java.util.UUID;
 
 public class NoteListActivity extends AppCompatActivity {
     /**
@@ -74,28 +68,14 @@ public class NoteListActivity extends AppCompatActivity {
 
         // Add an item click handler to the floating action button for adding a note
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadNoteDetailFragment(UUID.randomUUID().toString());
-            }
-        });
+        fab.setOnClickListener((View v) -> loadNoteDetailFragment("new"));
 
         // Create the adapter that will be used to load items into the recycler view
-        final NoteListAdapter adapter = new NoteListAdapter(new OnClickCallback() {
-            @Override
-            public void onClick(Note item) {
-                loadNoteDetailFragment(item.getNoteId());
-            }
-        });
+        final NoteListAdapter adapter = new NoteListAdapter((Note item) -> loadNoteDetailFragment(item.getNoteId()));
 
         // Create the swipe-to-delete handler
-        ItemTouchHelper swipeToDelete = new ItemTouchHelper(new SwipeToDelete(this, new RemoveCallback() {
-            @Override
-            public void onRemove(Note item) {
-                viewModel.removeNote(item.getNoteId());
-            }
-        }));
+        SwipeToDelete swipeHandler = new SwipeToDelete(this, (Note item) -> viewModel.removeNote(item.getNoteId()));
+        ItemTouchHelper swipeToDelete = new ItemTouchHelper(swipeHandler);
 
         // Configure the note list
         RecyclerView note_list = findViewById(R.id.note_list);
@@ -103,12 +83,7 @@ public class NoteListActivity extends AppCompatActivity {
         note_list.setAdapter(adapter);
 
         // Ensure the note list is updated whenever the repository is updated
-        viewModel.getNotesList().observe(this, new Observer<PagedList<Note>>() {
-            @Override
-            public void onChanged(@Nullable PagedList<Note> notes) {
-                adapter.submitList(notes);
-            }
-        });
+        viewModel.getNotesList().observe(this, adapter::submitList);
     }
 
     @Override

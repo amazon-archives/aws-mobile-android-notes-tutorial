@@ -16,11 +16,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 package com.amazonaws.mobile.samples.mynotes.ui;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -31,7 +29,6 @@ import android.widget.EditText;
 
 import com.amazonaws.mobile.samples.mynotes.NotesApp;
 import com.amazonaws.mobile.samples.mynotes.R;
-import com.amazonaws.mobile.samples.mynotes.models.Note;
 import com.amazonaws.mobile.samples.mynotes.viewmodels.NoteDetailViewModel;
 
 public class NoteDetailFragment extends Fragment {
@@ -44,7 +41,8 @@ public class NoteDetailFragment extends Fragment {
 
         Bundle arguments = getArguments();
         if (arguments != null) {
-            noteId = arguments.getString(NotesApp.ITEM_ID);
+            String noteId = arguments.getString(NotesApp.ITEM_ID);
+            this.noteId = (noteId.equals("new")) ? null : noteId;
         }
     }
 
@@ -56,40 +54,24 @@ public class NoteDetailFragment extends Fragment {
         final EditText contentField = view.findViewById(R.id.edit_content);
 
         viewModel = ViewModelProviders.of(this).get(NoteDetailViewModel.class);
-        viewModel.getNote().observe(this, new Observer<Note>() {
-            @Override
-            public void onChanged(@Nullable Note note) {
-                titleField.setText(note.getTitle());
-                contentField.setText(note.getContent());
-            }
-        });
-        viewModel.setNoteId(noteId);
+        viewModel.getTitle().observe(this, titleField::setText);
+        viewModel.getContent().observe(this, contentField::setText);
+        if (noteId != null) {
+            viewModel.setNoteId(noteId);
+        }
 
-        titleField.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) { }
-            @Override
-            public void afterTextChanged(Editable s) {
-                Note note = viewModel.getNote().getValue();
-                note.setTitle(s.toString());
-                viewModel.saveNote(note);
+        TextWatcher saveHandler = new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            @Override public void afterTextChanged(Editable s) {
+                String title = titleField.getText().toString();
+                String content = contentField.getText().toString();
+                viewModel.save(title, content);
             }
-        });
+        };
 
-        contentField.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) { }
-            @Override
-            public void afterTextChanged(Editable s) {
-                Note note = viewModel.getNote().getValue();
-                note.setContent(s.toString());
-                viewModel.saveNote(note);
-            }
-        });
+        titleField.addTextChangedListener(saveHandler);
+        contentField.addTextChangedListener(saveHandler);
 
         return view;
     }

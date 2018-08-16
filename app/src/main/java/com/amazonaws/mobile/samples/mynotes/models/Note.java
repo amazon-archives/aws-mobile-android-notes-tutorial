@@ -38,11 +38,17 @@ public class Note {
         content = "";
     }
 
+    public Note(String noteId, String title, String content) {
+        this.noteId = noteId;
+        this.title = title;
+        this.content = content;
+    }
+
     public String getNoteId() {
         return noteId;
     }
 
-    private void setNoteId(String noteId) {
+    public void setNoteId(String noteId) {
         this.noteId = noteId;
     }
 

@@ -26,33 +26,48 @@ import com.amazonaws.mobile.samples.mynotes.models.ResultCallback;
 import com.amazonaws.mobile.samples.mynotes.repository.NotesRepository;
 
 public class NoteDetailViewModel extends ViewModel {
-    private MutableLiveData<Note> mNote;
+    private String noteId;
+    private MutableLiveData<String> mTitle;
+    private MutableLiveData<String> mContent;
     private NotesRepository notesRepository;
 
     public NoteDetailViewModel() {
         this.notesRepository = Injection.getNotesRepository();
-        this.mNote = new MutableLiveData<>();
+        this.mTitle = new MutableLiveData<>();
+        this.mContent = new MutableLiveData<>();
     }
 
     public void setNoteId(final String noteId) {
-        notesRepository.get(noteId, new ResultCallback<Note>() {
-            @Override
-            public void onResult(Note result) {
-                if (result == null)
-                    result = new Note(noteId);
-                mNote.postValue(result);
-            }
+        this.noteId = noteId;
+        notesRepository.get(noteId, (Note result) -> {
+            if (result != null)
+                mTitle.postValue(result.getTitle());
+                mContent.postValue(result.getContent());
+                this.noteId = result.getNoteId();
         });
     }
 
-    public void saveNote(Note note) {
-        notesRepository.save(note, new ResultCallback<Note>() {
-            @Override
-            public void onResult(Note result) {
-                /* Do nothing */
-            }
-        });
+    public LiveData<String> getTitle() {
+        return mTitle;
     }
 
-    public LiveData<Note> getNote() { return mNote; }
+    public LiveData<String> getContent() {
+        return mContent;
+    }
+
+    public synchronized void save(String title, String content) {
+        if (noteId == null) {
+            notesRepository.create(title, content, (Note result) -> {
+                if (result != null) {
+                    noteId = result.getNoteId();
+                }
+            });
+        } else {
+            Note newNote = new Note(noteId, title, content);
+            notesRepository.update(newNote, (Note result) -> {
+                /* Do Nothing */
+            });
+        }
+    }
+
 }

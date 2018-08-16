@@ -25,12 +25,10 @@ import com.amazonaws.mobile.samples.mynotes.models.ResultCallback;
 import com.amazonaws.mobile.samples.mynotes.services.DataService;
 
 public class NotesRepository {
-    private DataService dataService;
     private LiveData<PagedList<Note>> pagedList;
     private LiveData<NotesDataSource> dataSource;
 
     public NotesRepository(DataService dataService) {
-        this.dataService = dataService;
         NotesDataSourceFactory factory = new NotesDataSourceFactory(dataService);
         dataSource = factory.getCurrentDataSource();
         pagedList = new LivePagedListBuilder<>(factory, 20).build();
@@ -45,10 +43,17 @@ public class NotesRepository {
     }
 
     /**
-     * API operation to save an item to the data store
+     * API operation to create an item in the data store
      */
-    public void save(Note note, ResultCallback<Note> callback) {
-        dataSource.getValue().saveItem(note, callback);
+    public void create(String title, String content, ResultCallback<Note> callback) {
+        dataSource.getValue().createItem(title, content, callback);
+    }
+
+    /**
+     * API operation to update an item in the data store
+     */
+    public void update(Note note, ResultCallback<Note> callback) {
+        dataSource.getValue().updateItem(note, callback);
     }
 
     /**

@@ -93,21 +93,36 @@ public class MockDataService implements DataService {
     }
 
     /**
-     * Save a note to the backing store
+     * Create a new note a note to the backing store
      *
-     * @param note the note to be saved
+     * @param title the title of the new note
+     * @param content the content for the new note
      * @param callback the response from the server (null would indicate that the operation failed)
      */
     @Override
-    public void saveNote(Note note, ResultCallback<Note> callback) {
-        if (note == null || note.getNoteId().isEmpty()) throw new IllegalArgumentException();
-
-        int idx = indexOfFirst(note.getNoteId());
-        if (idx >= 0)
-            items.set(idx, note);
-        else
-            items.add(note);
+    public void createNote(String title, String content, ResultCallback<Note> callback) {
+        Note note = new Note();
+        note.setTitle(title);
+        note.setContent(content);
+        items.add(note);
         callback.onResult(note);
+    }
+
+    /**
+     * Update an existing note in the backing store
+     *
+     * @param note the new contents of the note
+     * @param callback the response from the server (null would indicate that the operation failed)
+     */
+    @Override
+    public void updateNote(Note note, ResultCallback<Note> callback) {
+        int idx = indexOfFirst(note.getNoteId());
+        if (idx >= 0) {
+            items.set(idx, note);
+            callback.onResult(note);
+        } else {
+            callback.onResult(null);
+        }
     }
 
     /**

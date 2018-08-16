@@ -25,6 +25,8 @@ import com.amazonaws.mobile.samples.mynotes.models.PagedListConnectionResponse;
 import com.amazonaws.mobile.samples.mynotes.models.ResultCallback;
 import com.amazonaws.mobile.samples.mynotes.services.DataService;
 
+import javax.xml.transform.Result;
+
 /**
  * A DataSource implements a paging system for a RecyclerView.  This one uses the DataService
  * to provide a paged view into the Notes API.
@@ -47,11 +49,8 @@ public class NotesDataSource extends PageKeyedDataSource<String,Note> {
     @Override
     public void loadInitial(@NonNull LoadInitialParams<String> params, @NonNull final LoadInitialCallback<String, Note> callback) {
         Log.d(TAG, String.format("loadInitial(%d)", params.requestedLoadSize));
-        dataService.loadNotes(params.requestedLoadSize, null, new ResultCallback<PagedListConnectionResponse<Note>>() {
-            @Override
-            public void onResult(PagedListConnectionResponse<Note> result) {
-                callback.onResult(result.getItems(), null, result.getNextToken());
-            }
+        dataService.loadNotes(params.requestedLoadSize, null, (PagedListConnectionResponse<Note> result) -> {
+            callback.onResult(result.getItems(), null, result.getNextToken());
         });
     }
 
@@ -63,11 +62,8 @@ public class NotesDataSource extends PageKeyedDataSource<String,Note> {
     @Override
     public void loadBefore(@NonNull LoadParams<String> params, @NonNull final LoadCallback<String, Note> callback) {
         Log.d(TAG, String.format("loadAfter(%d, %s)", params.requestedLoadSize, params.key));
-        dataService.loadNotes(params.requestedLoadSize, params.key, new ResultCallback<PagedListConnectionResponse<Note>>() {
-            @Override
-            public void onResult(PagedListConnectionResponse<Note> result) {
-                callback.onResult(result.getItems(), result.getNextToken());
-            }
+        dataService.loadNotes(params.requestedLoadSize, params.key, (PagedListConnectionResponse<Note> result) -> {
+            callback.onResult(result.getItems(), result.getNextToken());
         });
     }
 
@@ -88,12 +84,9 @@ public class NotesDataSource extends PageKeyedDataSource<String,Note> {
      * to delete an item.
      */
     public void deleteItem(String noteId, @NonNull final ResultCallback<Boolean> callback) {
-        dataService.deleteNote(noteId, new ResultCallback<Boolean>() {
-            @Override
-            public void onResult(Boolean result) {
-                if (result) invalidate();
-                callback.onResult(result);
-            }
+        dataService.deleteNote(noteId, (Boolean result) -> {
+            if (result) invalidate();
+            callback.onResult(result);
         });
     }
 
@@ -110,13 +103,17 @@ public class NotesDataSource extends PageKeyedDataSource<String,Note> {
      * the list, so we must ensure that the list is invalidated when they succeed.  This call is
      * to save an item.
      */
-    public void saveItem(Note note, @NonNull final ResultCallback<Note> callback) {
-        dataService.saveNote(note, new ResultCallback<Note>() {
-            @Override
-            public void onResult(Note result) {
-                if (result != null) invalidate();
-                callback.onResult(result);
-            }
+    public void createItem(@NonNull String title, @NonNull String content, @NonNull final ResultCallback<Note> callback) {
+        dataService.createNote(title, content, (Note result) -> {
+            if (result != null) invalidate();
+            callback.onResult(result);
+        });
+    }
+
+    public void updateItem(@NonNull Note note, @NonNull final ResultCallback<Note> callback) {
+        dataService.updateNote(note, (Note result) -> {
+            if (result != null) invalidate();
+            callback.onResult(result);
         });
     }
 }

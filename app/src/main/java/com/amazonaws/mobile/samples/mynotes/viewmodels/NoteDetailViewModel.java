@@ -55,19 +55,19 @@ public class NoteDetailViewModel extends ViewModel {
         return mContent;
     }
 
-    public synchronized void save(String title, String content) {
-        if (noteId == null) {
-            notesRepository.create(title, content, (Note result) -> {
-                if (result != null) {
-                    noteId = result.getNoteId();
-                }
-            });
-        } else {
-            Note newNote = new Note(noteId, title, content);
-            notesRepository.update(newNote, (Note result) -> {
-                /* Do Nothing */
-            });
-        }
+    public synchronized void create(String title, String content, ResultCallback<Note> callback) {
+        notesRepository.create(title, content, (Note result) -> {
+            if (result != null) {
+                noteId = result.getNoteId();
+                callback.onResult(result);
+            }
+        });
     }
 
+    public synchronized void update(String title, String content) {
+        Note newNote = new Note(noteId, title, content);
+        notesRepository.update(newNote, (Note result) -> {
+            /* Do Nothing */
+        });
+    }
 }

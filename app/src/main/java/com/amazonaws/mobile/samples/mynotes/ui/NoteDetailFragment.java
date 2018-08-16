@@ -29,6 +29,7 @@ import android.widget.EditText;
 
 import com.amazonaws.mobile.samples.mynotes.NotesApp;
 import com.amazonaws.mobile.samples.mynotes.R;
+import com.amazonaws.mobile.samples.mynotes.models.Note;
 import com.amazonaws.mobile.samples.mynotes.viewmodels.NoteDetailViewModel;
 
 public class NoteDetailFragment extends Fragment {
@@ -51,12 +52,30 @@ public class NoteDetailFragment extends Fragment {
         View view = inflater.inflate(R.layout.note_detail, container, false);
 
         final EditText titleField = view.findViewById(R.id.edit_title);
+        titleField.setEnabled(false);   // Disable the field by default
+
         final EditText contentField = view.findViewById(R.id.edit_content);
+        contentField.setEnabled(false);
 
         viewModel = ViewModelProviders.of(this).get(NoteDetailViewModel.class);
-        viewModel.getTitle().observe(this, titleField::setText);
-        viewModel.getContent().observe(this, contentField::setText);
-        if (noteId != null) {
+        // Observe the view model values.  Once we receive the value, enable the field.
+        viewModel.getTitle().observe(this, (String title) -> {
+            titleField.setText(title);
+            titleField.setEnabled(true);
+        });
+        viewModel.getContent().observe(this, (String content) -> {
+            contentField.setText(content);
+            contentField.setEnabled(true);
+        });
+
+        // If this is a new note, create the note, then enable the fields.  Otherwise just load the fields
+        // - the fields are received via observables
+        if (noteId == null) {
+            viewModel.create("", "", (Note result) -> {
+                titleField.setEnabled(true);
+                contentField.setEnabled(true);
+            });
+        } else {
             viewModel.setNoteId(noteId);
         }
 
@@ -66,7 +85,7 @@ public class NoteDetailFragment extends Fragment {
             @Override public void afterTextChanged(Editable s) {
                 String title = titleField.getText().toString();
                 String content = contentField.getText().toString();
-                viewModel.save(title, content);
+                viewModel.update(title, content);
             }
         };
 

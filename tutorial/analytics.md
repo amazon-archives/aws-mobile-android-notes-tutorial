@@ -221,7 +221,8 @@ public static synchronized void initialize(Context context) {
 
 You should also add the `AWSService` and `AWSAnalyticsService` classes to the list of imports for the class.  You can easily do this using **Alt+Enter** in the editor.
 
-> **Tip** Auto Import: You can set up Auto Import to automatically import classes that you need. On Windows or Linux, you can find Auto Import under **File** > **Settings**. On a Mac, you can find it under **Android Studio** > **Preferences**. The Auto Import setting is under **Editor** > **General** > **Auto Import** > **Java**. Change **Insert imports on paste** to **All** and select the **Add unambiguous imports on the fly** option.
+> **Tip**
+> You can set up Auto Import to automatically import classes that you need. On Windows or Linux, you can find Auto Import under **File** > **Settings**. On a Mac, you can find it under **Android Studio** > **Preferences**. The Auto Import setting is under **Editor** > **General** > **Auto Import** > **Java**. Change **Insert imports on paste** to **All** and select the **Add unambiguous imports on the fly** option.
 
 ## Run the Project and Validate Results
 

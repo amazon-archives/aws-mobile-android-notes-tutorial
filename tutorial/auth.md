@@ -29,20 +29,20 @@ The `amplify auth add` command creates an Amazon Cognito user pool configured fo
 
 1. Open the `app/build.gradle` file and add the following lines to the `dependencies` section:
 
-```gradle
-dependencies {
-    // Other dependencies will be here already
+    ```gradle
+    dependencies {
+        // Other dependencies will be here already
 
-    // AWS Mobile SDK for Android
-    def aws_version = '2.6.27'
-    implementation "com.amazonaws:aws-android-sdk-core:$aws_version"
-    implementation "com.amazonaws:aws-android-sdk-auth-core:$aws_version@aar"
-    implementation "com.amazonaws:aws-android-sdk-auth-ui:$aws_version@aar"
-    implementation "com.amazonaws:aws-android-sdk-auth-userpools:$aws_version@aar"
-    implementation "com.amazonaws:aws-android-sdk-cognitoidentityprovider:$aws_version"
-    implementation "com.amazonaws:aws-android-sdk-pinpoint:$aws_version"
-}
-```
+        // AWS Mobile SDK for Android
+        def aws_version = '2.6.27'
+        implementation "com.amazonaws:aws-android-sdk-core:$aws_version"
+        implementation "com.amazonaws:aws-android-sdk-auth-core:$aws_version@aar"
+        implementation "com.amazonaws:aws-android-sdk-auth-ui:$aws_version@aar"
+        implementation "com.amazonaws:aws-android-sdk-auth-userpools:$aws_version@aar"
+        implementation "com.amazonaws:aws-android-sdk-cognitoidentityprovider:$aws_version"
+        implementation "com.amazonaws:aws-android-sdk-pinpoint:$aws_version"
+    }
+    ```
 
 2. On the upper right, choose **Sync Now** to incorporate the dependencies you just declared.
 3. Open the `Injection.java` file and add the following method declaration:
@@ -173,7 +173,7 @@ The `.AuthenticatorActivity` section is added at the end. Ensure it is not dupli
 
 In the emulator, run the project using **Run** > **Run 'app'**. You should see a sign-in screen. Choose **Create new account** to create a new account. After the information is submitted, you should receive a confirmation code via email. Enter the confirmation code to complete registration, and then sign-in with your new account.
 
-> **Tip**: Use Amazon Workmail as a test email account
+> **Tip**
 >
 > If you don't want to use your own email account as a test account, create an [Amazon WorkMail](https://aws.amazon.com/workmail/) service within AWS for test accounts. You can get started for free with a 30-day trial for up to 25 accounts.
 

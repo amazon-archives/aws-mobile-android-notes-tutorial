@@ -10,15 +10,15 @@ You should be able to complete this section in 10-15 minutes.
 2. Choose **View**, choose **Tool Windows**, and then choose **Terminal**.  This opens a terminal prompt within Android Studio at the bottom of the window.
 3. In the terminal window, enter the following commands:
 
-   ```
-   $ amplify init
-   ```
+    ```
+    $ amplify init
+    ```
 
-  The CLI prompts you through the process of initializing your backend project.  When prompted for the `Res` directory:
+   The CLI prompts you through the process of initializing your backend project.  When prompted for the `Res` directory:
 
-  ```
-  ? Where is your Res directory: app/src/main/res
-  ```
+    ```
+    ? Where is your Res directory: app/src/main/res
+    ```
 
 4. Next, add the analytics service to your backend:
 

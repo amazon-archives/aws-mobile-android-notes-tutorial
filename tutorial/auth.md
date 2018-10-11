@@ -181,5 +181,5 @@ In the emulator, run the project using **Run** > **Run 'app'**. You should see a
 
 ## Next Steps
 
-* Continue by integrating a [Serverless Backend](tutorial-android-aws-mobile-notes-data).
+* Continue by integrating a [Serverless Backend](./data.md).
 * Learn more about [Amazon Cognito](https://aws.amazon.com/cognito/).

@@ -43,10 +43,9 @@ You should be able to complete this section of the tutorial in 45-60 minutes.
    When you run this command, the CLI uses your configuration choices to create or update the AWS resources that make up your cloud API backend. Once the services are configured, the CLI creates or updates configuration files in your app to connect it to your services.
 
 10. When prompted by the CLI, do the following:
-
-   * Do you want to generate code for your newly created GraphQL API: **Yes**.
-   * Enter the file name pattern of graphql queries, mutations and subscriptions: *(enter return to use default)*
-   * Do you want to generate/update all possible GraphQL operations - queries, mutations and subscriptions (Y/n): **Yes**
+    * Do you want to generate code for your newly created GraphQL API: **Yes**.
+    * Enter the file name pattern of graphql queries, mutations and subscriptions: *(enter return to use default)*
+    * Do you want to generate/update all possible GraphQL operations - queries, mutations and subscriptions (Y/n): **Yes**
 
 The AWS CloudFormation template that is generated creates an Amazon DynamoDB table that is protected by Amazon Cognito user pool authentication.  Access is provided by AWS AppSync.  AWS AppSync tags each record that is inserted into the database with the user ID of the authenticated user.  The authenticated user can read only the records that they own.
 

@@ -86,7 +86,7 @@ The `amplify analytics add` command adds the appropriate entries into the backen
 
 2. Choose **Sync Now** on the upper-right corner to incorporate the dependencies you just declared.
 
-## Create an AWSService.kt Class
+## Create an AWSService.java Class
 
 In the sample, you need to provide a class to provide access to the configuration and identity provider objects.  These objects are central to how Android applications locate and communicate with AWS resources.  This object should be a singleton.  In the sample, you use a central dependency class to ensure that the `AWSService` object is created one time only.
 
